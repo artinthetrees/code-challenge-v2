@@ -3,10 +3,11 @@ from .models import CommunityArea,RestaurantPermit
 
 @admin.register(CommunityArea)
 class CommunityAreaAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name','area_id')
 
 @admin.register(RestaurantPermit)
 class RestaurantPermitAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('permit_id', 'permit_type', 'community_area_id','issue_date','location')
+    list_filter = ('permit_type','community_area_id','issue_date')
 
 
