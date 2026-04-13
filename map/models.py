@@ -4,7 +4,7 @@ from django.contrib.gis.db import models as gis_models
 
 class CommunityArea(models.Model):
     name = models.CharField(max_length=32, null=True, blank=True)
-    area_id = models.IntegerField(null=True, blank=True)
+    area_id = models.IntegerField(null=False, blank=True, primary_key=True, default=999)
 
     def __str__(self):
         return self.name.title()
@@ -20,4 +20,6 @@ class RestaurantPermit(models.Model):
     street_direction = models.CharField(max_length=8, null=True, blank=True)
     street_name = models.CharField(max_length=32, null=True, blank=True)
     location = gis_models.PointField(null=True, blank=True)
-    community_area_id = models.CharField(max_length=2, null=True, blank=True)
+    # community_area_id = models.CharField(max_length=2, null=True, blank=True)
+    # community_area_id = models.ForeignKey(CommunityArea,on_delete=models.SET_DEFAULT,null=False,default=999)
+    community_area = models.ForeignKey(CommunityArea,on_delete=models.SET_NULL,null=True,blank=True)
