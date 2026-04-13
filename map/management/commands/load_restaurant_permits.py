@@ -4,7 +4,7 @@ from datetime import datetime
 from django.contrib.gis.geos.error import GEOSException
 from django.core.management.base import BaseCommand
 
-from map.models import RestaurantPermit
+from map.models import RestaurantPermit, CommunityArea
 
 
 class Command(BaseCommand):
@@ -29,6 +29,14 @@ class Command(BaseCommand):
                     continue
 
                 try:
+                    # handle case where community area is not provided and is an empty string so can't be directly coerced to integer
+                    try:
+                        ca_int = int(row["community_area"])
+                        ca_obj = CommunityArea.objects.get(area_id=ca_int)
+                    except:
+                        ca_int = None
+
+                    
                     restaurant = RestaurantPermit(
                         permit_id=row["id"],
                         permit_type=row["permit_type"],
@@ -41,7 +49,8 @@ class Command(BaseCommand):
                         street_direction=row["street_direction"],
                         street_name=row["street_name"],
                         location=row["location"],
-                        community_area_id=row["community_area"],
+                        #community_area_id=row["community_area"],
+                        community_area_id=ca_int,
                     )
                     restaurant.save()
 
