@@ -22,4 +22,4 @@ class RestaurantPermit(models.Model):
     location = gis_models.PointField(null=True, blank=True)
     # community_area_id = models.CharField(max_length=2, null=True, blank=True)
     # community_area_id = models.ForeignKey(CommunityArea,on_delete=models.SET_DEFAULT,null=False,default=999)
-    community_area = models.ForeignKey(CommunityArea,on_delete=models.SET_NULL,null=True,blank=True)
+    community_area = models.ForeignKey(CommunityArea,on_delete=models.SET_NULL,null=True,blank=True,related_name='permits')
