@@ -23,3 +23,15 @@ class RestaurantPermit(models.Model):
     # community_area_id = models.CharField(max_length=2, null=True, blank=True)
     # community_area_id = models.ForeignKey(CommunityArea,on_delete=models.SET_DEFAULT,null=False,default=999)
     community_area = models.ForeignKey(CommunityArea,on_delete=models.SET_NULL,null=True,blank=True,related_name='permits')
+
+    # https://stackoverflow.com/questions/22157437/model-field-based-on-other-fields#:~:text=A%20field%20that%20is%20always,16.5k8%2056%2093
+    # https://stackoverflow.com/questions/21740782/django-values-get-year-from-datetimefield
+    issue_year = models.PositiveSmallIntegerField(null=True,blank=True)
+    application_year = models.PositiveSmallIntegerField(null=True,blank=True)
+
+    def save(self, *args, **kwargs):
+        #self.score = self.x + self.y + self.z
+        self.issue_year = self.issue_date.year
+        self.application_year = self.application_start_date.year
+        super(RestaurantPermit, self).save(*args, **kwargs) # Call the "real" save() method.
+        self.refresh_from_db()
