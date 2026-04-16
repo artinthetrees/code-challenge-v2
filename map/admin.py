@@ -7,7 +7,7 @@ class CommunityAreaAdmin(admin.ModelAdmin):
 
 @admin.register(RestaurantPermit)
 class RestaurantPermitAdmin(admin.ModelAdmin):
-    list_display = ('permit_id', 'permit_type', 'community_area_id','issue_date','location')
+    list_display = ('permit_id', 'permit_type', 'community_area_id','issue_date','issue_year','location')
     list_filter = ('permit_type','community_area_id','issue_date')
 
 
