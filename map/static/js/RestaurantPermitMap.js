@@ -43,16 +43,38 @@ export default function RestaurantPermitMap() {
   const [year, setYear] = useState(2026)
 
   const yearlyDataEndpoint = `/map-data/?year=${year}`
+  const testyearlyDataEndpoint = `http://localhost:8000/map-data/?year=${year}`
+
+  // useEffect(() => {
+  //   fetch(testyearlyDataEndpoint)
+  //     .then((res) => {
+  //       res.json()
+  //     })  
+  //     .then((data) => {
+  //       /**
+  //        * TODO: Fetch the data needed to supply to map with data
+  //        */
+  //       setCurrentYearData(data);
+  //     })
+  // }, [testyearlyDataEndpoint])
 
   useEffect(() => {
-    fetch()
-      .then((res) => res.json())
-      .then((data) => {
-        /**
-         * TODO: Fetch the data needed to supply to map with data
-         */
+    // 1. Add error handling and return the promise
+    fetch(testyearlyDataEndpoint)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return res.json(); // <--- CRITICAL FIX: Return the promise
       })
-  }, [yearlyDataEndpoint])
+      .then((data) => {
+        setCurrentYearData(data); // Set state with the parsed data
+      })
+      .catch((error) => {
+        console.error('Fetch error:', error);
+        // Optional: Set an error state here to display to the user
+      });
+  }, [testyearlyDataEndpoint]); // Runs when 'year' changes
 
 
   function getColor(percentageOfPermits) {
@@ -70,9 +92,23 @@ export default function RestaurantPermitMap() {
      * 2) On hover, display a popup with the community area's raw 
      * permit count for the year
      */
-    layer.setStyle()
-    layer.on("", () => {
-      layer.bindPopup("")
+    const ca_name = feature?.properties?.community || "Unknown";
+    // const ca_model_data = currentYearData.find(ca_entry => ca_entry.name === ca_name);
+    const ca_model_data = currentYearData.at(0);
+    const result = ca_model_data ?? "Default String"; 
+    const result2 = currentYearData?.length ?? 0;
+    // const ca_raw_permit_count = ca_model_data.num_permits;
+    // const ca_raw_permit_count_str = ca_raw_permit_count.toString();
+    // const ca_popup = `${ca_name}, ${ca_raw_permit_count_str}`;
+    layer.setStyle({
+      fillColor: '#ff0000', // Red fill color for shading
+      fillOpacity: 0.5,    // Semi-transparent
+      color: '#000000',    // Border color
+      weight: 2            // Border weight
+    })
+    layer.on("mouseover", () => {
+      // layer.bindPopup(result2.toString())
+      layer.bindPopup(result2.toString())
       layer.openPopup()
     })
   }
@@ -85,7 +121,7 @@ export default function RestaurantPermitMap() {
       </p>
       <p className="fs-4">
         Maximum number of restaurant permits in a single area:
-        {/* TODO: display this value */}
+        { year }
       </p>
       <MapContainer
         id="restaurant-map"
@@ -96,13 +132,17 @@ export default function RestaurantPermitMap() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png"
         />
-        {currentYearData.length > 0 ? (
+        <GeoJSON 
+          data={RAW_COMMUNITY_AREAS} 
+          onEachFeature={setAreaInteraction}
+        />
+        {/* {currentYearData.length > 0 ? (
           <GeoJSON
             data={RAW_COMMUNITY_AREAS}
             onEachFeature={setAreaInteraction}
             key={maxNumPermits}
           />
-        ) : null}
+        ) : null} */}
       </MapContainer>
     </>
   )
