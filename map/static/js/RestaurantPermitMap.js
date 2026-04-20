@@ -67,12 +67,15 @@ export default function RestaurantPermitMap() {
     console.log('Updated State:', currentYearData);
   }, [currentYearData]);
 
-  // Use reduce to sum the 'amount' key
+  // Get total number of permits across all community areas in the selected year
   const totalPermits = currentYearData.reduce((accumulator, currentItem) => {
     return accumulator + currentItem.num_permits;
   }, 0); // 0 is the initialValue
-
   console.log('Total Permits:', totalPermits); 
+
+  // Get max number of permits in a single community area in the selected year
+  const maxPermits = Math.max(...currentYearData.map(item => item.num_permits));
+  console.log('Max Permits:', maxPermits); 
 
   function getColor(percentageOfPermits) {
     /**
@@ -117,9 +120,9 @@ export default function RestaurantPermitMap() {
         Restaurant permits issued this year: { totalPermits }
       </p>
       <p className="fs-4">
-        Maximum number of restaurant permits in a single area:
+        Maximum number of restaurant permits in a single area: { maxPermits }
         {/* {  testyearlyDataEndpoint  } */}
-        { currentYearData.length }
+        {/* { currentYearData.length } */}
       </p>
       <MapContainer
         id="restaurant-map"
