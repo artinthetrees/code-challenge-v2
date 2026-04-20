@@ -45,36 +45,40 @@ export default function RestaurantPermitMap() {
   const yearlyDataEndpoint = `/map-data/?year=${year}`
   const testyearlyDataEndpoint = `http://localhost:8000/map-data/?year=${year}`
 
-  // useEffect(() => {
-  //   fetch(testyearlyDataEndpoint)
-  //     .then((res) => {
-  //       res.json()
-  //     })  
-  //     .then((data) => {
-  //       /**
-  //        * TODO: Fetch the data needed to supply to map with data
-  //        */
-  //       setCurrentYearData(data);
-  //     })
-  // }, [testyearlyDataEndpoint])
-
   useEffect(() => {
-    // 1. Add error handling and return the promise
     fetch(testyearlyDataEndpoint)
       .then((res) => {
-        if (!res.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return res.json(); // <--- CRITICAL FIX: Return the promise
-      })
+        console.log('Status:', res.status);
+        // console.log('Data:', res.json());
+        return res.json()
+      })  
       .then((data) => {
-        setCurrentYearData(data); // Set state with the parsed data
+        /**
+         * TODO: Fetch the data needed to supply to map with data
+         */
+        console.log('Data:', data);
+        setCurrentYearData(data);
       })
-      .catch((error) => {
-        console.error('Fetch error:', error);
-        // Optional: Set an error state here to display to the user
-      });
-  }, [testyearlyDataEndpoint]); // Runs when 'year' changes
+      .catch(error => console.error('Error:', error)); // Log errors
+  }, [testyearlyDataEndpoint])
+
+  // useEffect(() => {
+  //   // 1. Add error handling and return the promise
+  //   fetch(testyearlyDataEndpoint)
+  //     .then((res) => {
+  //       if (!res.ok) {
+  //         throw new Error('Network response was not ok');
+  //       }
+  //       return res.json(); // <--- CRITICAL FIX: Return the promise
+  //     })
+  //     .then((data) => {
+  //       setCurrentYearData(data); // Set state with the parsed data
+  //     })
+  //     .catch((error) => {
+  //       console.error('Fetch error:', error);
+  //       // Optional: Set an error state here to display to the user
+  //     });
+  // }, [testyearlyDataEndpoint]); // Runs when 'year' changes
 
 
   function getColor(percentageOfPermits) {
@@ -121,7 +125,7 @@ export default function RestaurantPermitMap() {
       </p>
       <p className="fs-4">
         Maximum number of restaurant permits in a single area:
-        { year }
+        {  testyearlyDataEndpoint  }
       </p>
       <MapContainer
         id="restaurant-map"
