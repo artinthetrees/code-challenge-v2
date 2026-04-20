@@ -67,6 +67,13 @@ export default function RestaurantPermitMap() {
     console.log('Updated State:', currentYearData);
   }, [currentYearData]);
 
+  // Use reduce to sum the 'amount' key
+  const totalPermits = currentYearData.reduce((accumulator, currentItem) => {
+    return accumulator + currentItem.num_permits;
+  }, 0); // 0 is the initialValue
+
+  console.log('Total Permits:', totalPermits); 
+
   function getColor(percentageOfPermits) {
     /**
      * TODO: Use this function in setAreaInteraction to set a community 
@@ -107,11 +114,12 @@ export default function RestaurantPermitMap() {
     <>
       <YearSelect filterVal={year} setFilterVal={setYear} />
       <p className="fs-4">
-        Restaurant permits issued this year: {/* TODO: display this value */}
+        Restaurant permits issued this year: { totalPermits }
       </p>
       <p className="fs-4">
         Maximum number of restaurant permits in a single area:
-        {  testyearlyDataEndpoint  }
+        {/* {  testyearlyDataEndpoint  } */}
+        { currentYearData.length }
       </p>
       <MapContainer
         id="restaurant-map"
