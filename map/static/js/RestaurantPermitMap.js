@@ -58,28 +58,14 @@ export default function RestaurantPermitMap() {
          */
         console.log('Data:', data);
         setCurrentYearData(data);
+        // console.log('Updated State:', currentYearData);
       })
       .catch(error => console.error('Error:', error)); // Log errors
   }, [testyearlyDataEndpoint])
 
-  // useEffect(() => {
-  //   // 1. Add error handling and return the promise
-  //   fetch(testyearlyDataEndpoint)
-  //     .then((res) => {
-  //       if (!res.ok) {
-  //         throw new Error('Network response was not ok');
-  //       }
-  //       return res.json(); // <--- CRITICAL FIX: Return the promise
-  //     })
-  //     .then((data) => {
-  //       setCurrentYearData(data); // Set state with the parsed data
-  //     })
-  //     .catch((error) => {
-  //       console.error('Fetch error:', error);
-  //       // Optional: Set an error state here to display to the user
-  //     });
-  // }, [testyearlyDataEndpoint]); // Runs when 'year' changes
-
+  useEffect(() => {
+    console.log('Updated State:', currentYearData);
+  }, [currentYearData]);
 
   function getColor(percentageOfPermits) {
     /**
