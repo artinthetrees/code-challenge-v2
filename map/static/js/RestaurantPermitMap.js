@@ -108,21 +108,13 @@ export default function RestaurantPermitMap() {
      * TODO: Use this function in setAreaInteraction to set a community 
      * area's color using the communityAreaColors constant above
      */
-    console.log('check percentageOfPermits:', percentageOfPermits);
-    console.log('check permitPercentQuartiles:', permitPercentQuartiles.q1);
-    console.log('check permitPercentQuartiles:', permitPercentQuartiles.q2);
-    console.log('check permitPercentQuartiles:', permitPercentQuartiles.q3);
     if (percentageOfPermits <= permitPercentQuartiles.q1) {
-      console.log('check:', '1');
       return communityAreaColors[0];
     } else if (percentageOfPermits <= permitPercentQuartiles.q2) {
-      console.log('check:', '2');
       return communityAreaColors[1];
     } else if (percentageOfPermits <= permitPercentQuartiles.q3) {
-      console.log('check:', '3');
       return communityAreaColors[2];
     } else {
-      console.log('check:', '4');
       return communityAreaColors[3];
     }
 
@@ -137,20 +129,13 @@ export default function RestaurantPermitMap() {
      * permit count for the year
      */
     const ca_name = feature?.properties?.community || "Unknown";
-    console.log('ca name:', ca_name); 
     const ca_model_data = currentYearData.find(ca_entry => ca_entry.name === ca_name);
-    console.log('ca model data:', ca_model_data);
     const ca_model_data_str = JSON.stringify(ca_model_data, null, 2)
+    const ca_num_permits_str = ca_model_data.num_permits.toString()
+    let pop_up_str = `${ca_name}<br>Permits: ${ca_num_permits_str}`;
     
-    console.log('Percent Permits Quartiles:', permitPercentQuartiles);
     let ca_color = getColor(ca_model_data.percent_permits)
-    console.log('ca color:', ca_color);
-    // const ca_model_data = currentYearData.at(0);
-    // const result = ca_model_data ?? "Default String"; 
-    // const result2 = currentYearData?.length ?? 0;
-    // const ca_raw_permit_count = ca_model_data.num_permits;
-    // const ca_raw_permit_count_str = ca_raw_permit_count.toString();
-    // const ca_popup = `${ca_name}, ${ca_raw_permit_count_str}`;
+    
     layer.setStyle({
       // fillColor: '#ff0000', // Red fill color for shading
       fillColor: ca_color, // Red fill color for shading
@@ -159,8 +144,7 @@ export default function RestaurantPermitMap() {
       weight: 2            // Border weight
     })
     layer.on("mouseover", () => {
-      // layer.bindPopup(result2.toString())
-      layer.bindPopup(ca_model_data_str)
+      layer.bindPopup(pop_up_str)
       layer.openPopup()
     })
   }
