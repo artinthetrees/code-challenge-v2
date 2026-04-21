@@ -46,7 +46,7 @@ export default function RestaurantPermitMap() {
   const testyearlyDataEndpoint = `http://localhost:8000/map-data/?year=${year}`
 
   useEffect(() => {
-    fetch(testyearlyDataEndpoint)
+    fetch(yearlyDataEndpoint)
       .then((res) => {
         console.log('Status:', res.status);
         // console.log('Data:', res.json());
@@ -61,7 +61,7 @@ export default function RestaurantPermitMap() {
         // console.log('Updated State:', currentYearData);
       })
       .catch(error => console.error('Error:', error)); // Log errors
-  }, [testyearlyDataEndpoint])
+  }, [yearlyDataEndpoint])
 
   useEffect(() => {
     console.log('Updated State:', currentYearData);
