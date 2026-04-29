@@ -42,6 +42,7 @@ if os.getenv("SENTRY_DSN"):
 # Application definition
 
 INSTALLED_APPS = [
+    "django.contrib.gis",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

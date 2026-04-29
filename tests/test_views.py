@@ -15,21 +15,21 @@ def test_map_data_view():
 
     # Test permits for Beverly
     RestaurantPermit.objects.create(
-        community_area_id=area1.area_id, issue_date=date(2021, 1, 15)
+        community_area_id=area1.area_id, issue_date=date(2021, 1, 15), application_start_date=date(2020, 3, 10) 
     )
     RestaurantPermit.objects.create(
-        community_area_id=area1.area_id, issue_date=date(2021, 2, 20)
+        community_area_id=area1.area_id, issue_date=date(2021, 2, 20), application_start_date=date(2020, 3, 10) 
     )
 
     # Test permits for Lincoln Park
     RestaurantPermit.objects.create(
-        community_area_id=area2.area_id, issue_date=date(2021, 3, 10)
+        community_area_id=area2.area_id, issue_date=date(2021, 3, 10), application_start_date=date(2020, 3, 10) 
     )
     RestaurantPermit.objects.create(
-        community_area_id=area2.area_id, issue_date=date(2021, 2, 14)
+        community_area_id=area2.area_id, issue_date=date(2021, 2, 14), application_start_date=date(2020, 3, 10) 
     )
     RestaurantPermit.objects.create(
-        community_area_id=area2.area_id, issue_date=date(2021, 6, 22)
+        community_area_id=area2.area_id, issue_date=date(2021, 6, 22), application_start_date=date(2020, 3, 10) 
     )
 
     # Query the map data endpoint
@@ -39,3 +39,9 @@ def test_map_data_view():
     # TODO: Complete the test by asserting that the /map-data/ endpoint
     # returns the correct number of permits for Beverly and Lincoln 
     # Park in 2021
+    
+    beverly = next((d for d in response.data if d.get('name') == "Beverly"), None)
+    assert (beverly and beverly["num_permits"] == 2)
+
+    lp = next((d for d in response.data if d.get('name') == "Lincoln Park"), None)
+    assert (lp and lp["num_permits"] == 3)
